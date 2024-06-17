@@ -17,7 +17,7 @@ public class JdbcTest2_insert {
 		
 		//Statement st = con.createStatement();
 		
-		ps.setString(1,"104");
+		ps.setString(1,"105");
 		ps.setString(2,"소설");
 		ps.setInt(3,4000);
 		int r = ps.executeUpdate();
