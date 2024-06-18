@@ -34,6 +34,9 @@ public class JdbcTest5_try {
 		e.printStackTrace();
 	} finally {
 		
+		//아래 긴 문장들을 이 한 줄만으로 요약할 수 있음
+		//util.close(rs,ps,con);
+		
 		try {
 			if (rs!=null) rs.close();
 		} catch (SQLException e) {
