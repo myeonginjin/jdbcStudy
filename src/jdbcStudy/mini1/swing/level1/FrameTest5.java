@@ -13,20 +13,31 @@ public class FrameTest5 {
 	
 	public JFrame frm;
 	public JButton btn1, btn2;
-	public FlowLayout flow;
+	public JTextField tf1, tf2;
 	public ActionEventTest aet;
 	
 	public FrameTest5 () {
 		frm = new JFrame("제목은 여기에...");
-		btn1 = new JButton("버튼 1입니다.");
-		btn2 = new JButton("버튼 2/입니다.");
-		flow = new FlowLayout();
-		aet = new ActionEventTest();
+		tf1 = new JTextField();
+		tf2 = new JTextField();
+		btn1 = new JButton("ToDown");
+		btn2 = new JButton("ToUp");
+		aet = new ActionEventTest(tf1, tf2);
 	}
 	
 	public void makeGui() {
 		frm.setSize(450,450);
-		frm.setLayout(flow);
+		frm.setLayout(null);
+		
+		tf1.setBounds(10, 20, 200, 30);
+		tf2.setBounds(10, 70, 200, 30);
+		btn1.setBounds(240, 20, 100, 30);
+		btn2.setBounds(240, 70, 100, 30);
+		
+		
+		frm.add(tf1);
+		frm.add(tf2);
+		
 		frm.add(btn1);
 		frm.add(btn2);
 		frm.setVisible(true);

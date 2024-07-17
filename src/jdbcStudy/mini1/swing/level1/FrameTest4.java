@@ -19,9 +19,9 @@ public class FrameTest4 {
 	public FrameTest4 () {
 		frm = new JFrame("제목은 여기에...");
 		btn1 = new JButton("버튼 1입니다.");
-		btn2 = new JButton("버튼 2/입니다.");
+		btn2 = new JButton("버튼 2입니다.");
 		flow = new FlowLayout();
-		aet = new ActionEventTest();
+		//aet = new ActionEventTest();
 	}
 	
 	public void makeGui() {
