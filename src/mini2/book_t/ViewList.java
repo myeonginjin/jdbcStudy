@@ -1,4 +1,4 @@
-package mini1.book;
+package mini2.book_t;
 
 import java.awt.BorderLayout;
 
