@@ -24,7 +24,7 @@ public class DAOList {
 		} catch (ClassNotFoundException | SQLException e) {
 			return 0;
 		}
-	} // constructor
+	}
 
 	public int close() {
 		try {
@@ -33,24 +33,22 @@ public class DAOList {
 		} catch (SQLException e) {
 			return 0;
 		}
-	} // close
+	}
 
 	public Vector<Vector<String>> readAll() {
-
 		Vector<Vector<String>> bookList = null;
-
 		try {
 			String sql = "select bookid, bookname, publisher, price from book";
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 
-			bookList = new Vector<Vector<String>>();
-			while(rs.next()) {
-				Vector<String> obj = new Vector<String>();
-				obj.add( rs.getString("bookid") );
-				obj.add( rs.getString("bookname") );
-				obj.add( rs.getString("publisher") );
-				obj.add( rs.getString("price") );
+			bookList = new Vector<>();
+			while (rs.next()) {
+				Vector<String> obj = new Vector<>();
+				obj.add(rs.getString("bookid"));
+				obj.add(rs.getString("bookname"));
+				obj.add(rs.getString("publisher"));
+				obj.add(rs.getString("price"));
 				bookList.add(obj);
 			}
 
@@ -59,58 +57,61 @@ public class DAOList {
 		} catch (SQLException e) {
 			return null;
 		}
+		return bookList;
+	}
+
+	public Vector<Vector<String>> searchBooks(String name, String publisher, String minPrice, String maxPrice) {
+		Vector<Vector<String>> bookList = new Vector<>();
+
+		try {
+			StringBuilder sql = new StringBuilder("select bookid, bookname, publisher, price from book where 1=1");
+			if (!name.isEmpty()) {
+				sql.append(" and bookname like ?");
+			}
+			if (!publisher.isEmpty()) {
+				sql.append(" and publisher like ?");
+			}
+			if (!minPrice.isEmpty()) {
+				sql.append(" and price >= ?");
+			}
+			if (!maxPrice.isEmpty()) {
+				sql.append(" and price <= ?");
+			}
+
+			PreparedStatement psmt = con.prepareStatement(sql.toString());
+
+			int paramIndex = 1;
+			if (!name.isEmpty()) {
+				psmt.setString(paramIndex++, "%" + name + "%");
+			}
+			if (!publisher.isEmpty()) {
+				psmt.setString(paramIndex++, "%" + publisher + "%");
+			}
+			if (!minPrice.isEmpty()) {
+				psmt.setInt(paramIndex++, Integer.parseInt(minPrice));
+			}
+			if (!maxPrice.isEmpty()) {
+				psmt.setInt(paramIndex++, Integer.parseInt(maxPrice));
+			}
+
+			ResultSet rs = psmt.executeQuery();
+
+			while (rs.next()) {
+				Vector<String> obj = new Vector<>();
+				obj.add(rs.getString("bookid"));
+				obj.add(rs.getString("bookname"));
+				obj.add(rs.getString("publisher"));
+				obj.add(rs.getString("price"));
+				bookList.add(obj);
+			}
+
+			rs.close();
+			psmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 
 		return bookList;
-	} // readAll
-
-	public int insertOne(String bookname, String publisher, String price) {
-		int resultCnt = 0;
-
-		String sql = "insert into book (bookname, publisher, price) values(?, ?, ?)";
-
-		try {
-			PreparedStatement psmt = con.prepareStatement(sql);
-			psmt.setString(1, bookname);
-			psmt.setString(2, publisher);
-			psmt.setString(3, price);
-			resultCnt = psmt.executeUpdate();
-		} catch (SQLException e) { e.printStackTrace();
-			return -1;
-		}
-		return resultCnt;
 	}
-
-	public int updateOne(String bookid, String bookname, String publisher, String price) {
-		int resultCnt = 0;
-
-		String sql = "update book set bookname = ?, publisher = ?, price = ? where bookid = ?";
-
-		try {
-			PreparedStatement psmt = con.prepareStatement(sql);
-			psmt.setString(1, bookname);
-			psmt.setString(2, publisher);
-			psmt.setString(3, price);
-			psmt.setString(4, bookid);
-			resultCnt = psmt.executeUpdate();
-		} catch (SQLException e) { e.printStackTrace();
-			return -1;
-		}
-		return resultCnt;
-	}
-
-	public int deleteOne(String bookid) {
-		int resultCnt = 0;
-
-		String sql = "delete from book where bookid = ?";
-
-		try {
-			PreparedStatement psmt = con.prepareStatement(sql);
-			psmt.setString(1, bookid);
-			resultCnt = psmt.executeUpdate();
-		} catch (SQLException e) { e.printStackTrace();
-			return -1;
-		}
-		return resultCnt;
-	}
-
-} // class
+}
