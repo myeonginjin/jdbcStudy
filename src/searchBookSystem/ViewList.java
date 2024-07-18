@@ -2,7 +2,6 @@ package searchBookSystem;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -13,75 +12,82 @@ import javax.swing.JTextField;
 
 public class ViewList {
 
-	JFrame frm;
-	BorderLayout border;
-	JPanel panBtn, panSearch;
-	JButton btnAdd, btnReadAll, btnSearch;
-	JScrollPane scollPan;
-	JTable table;
+    JFrame frm;
+    BorderLayout border;
+    JPanel panBtn, panSearch;
+    JButton btnAdd, btnReadAll, btnSearch;
+    JScrollPane scrollPan;
+    JTable table;
 
-	JTextField tfName, tfPublisher, tfMinPrice, tfMaxPrice;
+    JTextField tfName, tfPublisher, tfMinPrice, tfMaxPrice;
 
-	ControllerList controller;
+    ControllerList controller;
 
-	ViewList() {
-		frm = new JFrame("도서 관리 프로그램");
-		border = new BorderLayout();
-		panBtn = new JPanel();
-		panSearch = new JPanel(new GridLayout(2, 4));
+    ViewList() {
+        frm = new JFrame("도서 관리 프로그램");
+        border = new BorderLayout();
+        panBtn = new JPanel();
+        panSearch = new JPanel(new GridLayout(2, 4));  // 2행 4열 그리드 레이아웃으로 변경
 
-		btnAdd = new JButton("도서 추가");
-		btnReadAll = new JButton("목록 조회");
-		btnSearch = new JButton("검색");
+        btnAdd = new JButton("도서 추가");
+        btnReadAll = new JButton("목록 조회");
+        btnSearch = new JButton("검색");
 
-		tfName = new JTextField();
-		tfPublisher = new JTextField();
-		tfMinPrice = new JTextField();
-		tfMaxPrice = new JTextField();
+        tfName = new JTextField();
+        tfPublisher = new JTextField();
+        tfMinPrice = new JTextField(5);  // 최소 가격 필드 크기 조정
+        tfMaxPrice = new JTextField(5);  // 최대 가격 필드 크기 조정
 
-		table = new JTable();
-		scollPan = new JScrollPane(table);
-		controller = new ControllerList(table, tfName, tfPublisher, tfMinPrice, tfMaxPrice);
-	}
+        table = new JTable();
+        scrollPan = new JScrollPane(table);
+        controller = new ControllerList(table, tfName, tfPublisher, tfMinPrice, tfMaxPrice);
+    }
 
-	public void makeGui() {
-		frm.setSize(800, 600);
-		frm.setLayout(border);
+    public void makeGui() {
+        frm.setSize(800, 600);
+        frm.setLayout(border);
 
-		panSearch.add(new JLabel("이름:"));
-		panSearch.add(tfName);
-		panSearch.add(new JLabel("출판사:"));
-		panSearch.add(tfPublisher);
-		panSearch.add(new JLabel("최소 가격:"));
-		panSearch.add(tfMinPrice);
-		panSearch.add(new JLabel("최대 가격:"));
-		panSearch.add(tfMaxPrice);
-		panSearch.add(new JLabel(""));
-		panSearch.add(btnSearch);
+        // 이름 검색 필드와 라벨 추가
+        panSearch.add(new JLabel("이름:"));
+        panSearch.add(tfName);
+        panSearch.add(new JLabel("출판사:"));
+        panSearch.add(tfPublisher);
 
-		frm.add(scollPan, BorderLayout.CENTER);
-		frm.add(panSearch, BorderLayout.NORTH);
-		frm.add(panBtn, BorderLayout.SOUTH);
+        // 가격 범위 필드와 라벨 추가
+        panSearch.add(new JLabel("가격 범위:"));
+        JPanel pricePanel = new JPanel();
+        pricePanel.add(tfMinPrice);
+        pricePanel.add(new JLabel(" ~ "));
+        pricePanel.add(tfMaxPrice);
+        panSearch.add(pricePanel);
+        
+        // 검색 버튼 추가
+        panSearch.add(new JLabel(""));
+        panSearch.add(btnSearch);
 
-		panBtn.add(btnAdd);
-		panBtn.add(btnReadAll);
+        frm.add(scrollPan, BorderLayout.CENTER);
+        frm.add(panSearch, BorderLayout.NORTH);
+        frm.add(panBtn, BorderLayout.SOUTH);
 
-		frm.setVisible(true);
-	}
+        panBtn.add(btnAdd);
+        panBtn.add(btnReadAll);
 
-	public void addEvent() {
-		frm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		btnAdd.addActionListener(controller);
-		btnReadAll.addActionListener(controller);
-		btnSearch.addActionListener(controller);
-		table.addMouseListener(controller);
+        frm.setVisible(true);
+    }
 
-		controller.readAll();
-	}
+    public void addEvent() {
+        frm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        btnAdd.addActionListener(controller);
+        btnReadAll.addActionListener(controller);
+        btnSearch.addActionListener(controller);
+        table.addMouseListener(controller);
 
-	public static void main(String[] args) {
-		ViewList vl = new ViewList();
-		vl.makeGui();
-		vl.addEvent();
-	}
+        controller.readAll();
+    }
+
+    public static void main(String[] args) {
+        ViewList vl = new ViewList();
+        vl.makeGui();
+        vl.addEvent();
+    }
 }
