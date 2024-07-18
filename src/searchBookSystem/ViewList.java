@@ -1,7 +1,9 @@
 package searchBookSystem;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -13,9 +15,8 @@ import javax.swing.JTextField;
 public class ViewList {
 
     JFrame frm;
-    BorderLayout border;
-    JPanel panBtn, panSearch;
-    JButton btnAdd, btnReadAll, btnSearch;
+    JPanel panSearch;
+    JButton btnSearch, btnReset;
     JScrollPane scrollPan;
     JTable table;
 
@@ -25,16 +26,13 @@ public class ViewList {
 
     ViewList() {
         frm = new JFrame("도서 관리 프로그램");
-        border = new BorderLayout();
-        panBtn = new JPanel();
-        panSearch = new JPanel(new GridLayout(2, 4));  // 2행 4열 그리드 레이아웃으로 변경
+        panSearch = new JPanel(new GridBagLayout());
 
-        btnAdd = new JButton("도서 추가");
-        btnReadAll = new JButton("목록 조회");
         btnSearch = new JButton("검색");
+        btnReset = new JButton("초기화");
 
-        tfName = new JTextField();
-        tfPublisher = new JTextField();
+        tfName = new JTextField(10);
+        tfPublisher = new JTextField(10);
         tfMinPrice = new JTextField(5);  // 최소 가격 필드 크기 조정
         tfMaxPrice = new JTextField(5);  // 최대 가격 필드 크기 조정
 
@@ -45,41 +43,73 @@ public class ViewList {
 
     public void makeGui() {
         frm.setSize(800, 600);
-        frm.setLayout(border);
+        frm.setLayout(new BorderLayout());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // 이름 검색 필드와 라벨 추가
-        panSearch.add(new JLabel("이름:"));
-        panSearch.add(tfName);
-        panSearch.add(new JLabel("출판사:"));
-        panSearch.add(tfPublisher);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panSearch.add(new JLabel("이름:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        panSearch.add(tfName, gbc);
+
+        // 세로줄 간의 간격 조정
+        gbc.insets = new Insets(5, 40, 5, 5);  // 간격을 넓힘
+
+        // 출판사 검색 필드와 라벨 추가
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        panSearch.add(new JLabel("출판사:"), gbc);
+
+        gbc.gridx = 3;
+        gbc.gridy = 0;
+        panSearch.add(tfPublisher, gbc);
 
         // 가격 범위 필드와 라벨 추가
-        panSearch.add(new JLabel("가격 범위:"));
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.insets = new Insets(5, 5, 5, 5); // 원래 간격으로 돌아가기
+        panSearch.add(new JLabel("가격 범위:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
         JPanel pricePanel = new JPanel();
         pricePanel.add(tfMinPrice);
         pricePanel.add(new JLabel(" ~ "));
         pricePanel.add(tfMaxPrice);
-        panSearch.add(pricePanel);
-        
+        panSearch.add(pricePanel, gbc);
+
+        // 세로줄 간의 간격 조정
+        gbc.insets = new Insets(5, 40, 5, 5);  // 간격을 넓힘
+
         // 검색 버튼 추가
-        panSearch.add(new JLabel(""));
-        panSearch.add(btnSearch);
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        panSearch.add(btnSearch, gbc);
+
+        // 초기화 버튼 추가
+        gbc.gridx = 3;
+        gbc.gridy = 1;
+        panSearch.add(btnReset, gbc);
+
+        // 초기화 버튼 크기 조정
+        btnReset.setPreferredSize(btnSearch.getPreferredSize());
 
         frm.add(scrollPan, BorderLayout.CENTER);
         frm.add(panSearch, BorderLayout.NORTH);
-        frm.add(panBtn, BorderLayout.SOUTH);
-
-        panBtn.add(btnAdd);
-        panBtn.add(btnReadAll);
 
         frm.setVisible(true);
     }
 
     public void addEvent() {
         frm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        btnAdd.addActionListener(controller);
-        btnReadAll.addActionListener(controller);
         btnSearch.addActionListener(controller);
+        btnReset.addActionListener(controller);
         table.addMouseListener(controller);
 
         controller.readAll();
