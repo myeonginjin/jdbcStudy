@@ -1,0 +1,68 @@
+package mini1.book;
+
+import java.awt.BorderLayout;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+public class ViewInsert extends JFrame {
+
+	JLabel labelBookName, labelPublisher, labelPrice;
+	JTextField tfBookName, tfPublisher, tfPrice;
+	JButton btnSave, btnCancel;
+	BorderLayout border;
+	JPanel panBtn, panIns;
+
+	ViewInsert() {
+		panBtn = new JPanel();
+		panIns = new JPanel();
+		border = new BorderLayout();
+		labelBookName = new JLabel("BookName");
+		labelPublisher = new JLabel("Publisher");
+		labelPrice = new JLabel("Price");
+		tfBookName = new JTextField();
+		tfPublisher = new JTextField();
+		tfPrice = new JTextField();
+		btnSave = new JButton("도서 저장");
+		btnCancel = new JButton("입력 취소");
+	}
+
+	public void makeGui() {
+		setTitle("도서 정보 입력");
+		setSize(500, 500);
+		setLayout(border);
+		add(panIns, BorderLayout.CENTER);
+		panIns.setLayout(null);
+		panIns.add(labelBookName); panIns.add(labelPublisher); panIns.add(labelPrice);
+		panIns.add(tfBookName); panIns.add(tfPublisher); panIns.add(tfPrice);
+		labelBookName.setBounds(10, 10, 100, 35);
+		labelPublisher.setBounds(10, 50, 100, 35);
+		labelPrice.setBounds(10, 90, 100, 35);
+		tfBookName.setBounds(120, 10, 300, 35);
+		tfPublisher.setBounds(120, 50, 300, 35);
+		tfPrice.setBounds(120, 90, 300, 35);
+		add(panBtn, BorderLayout.SOUTH);
+		panBtn.add(btnSave); panBtn.add(btnCancel);
+	}
+
+	public void addEvent(ControllerList controller) {
+		btnSave.addActionListener(controller);
+		btnCancel.addActionListener(controller);
+	}
+
+	public void closeEvent() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+} // class
+
+
+
+
+
+
+
+
